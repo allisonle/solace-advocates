@@ -5,6 +5,11 @@ const setup = () => {
   if (!process.env.DATABASE_URL) {
     console.error("DATABASE_URL is not set");
     return {
+      insert: () => ({
+        values: () => ({
+          returning: () => [],
+        }),
+      }),
       select: () => ({
         from: () => [],
       }),
