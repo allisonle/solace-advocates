@@ -2,7 +2,8 @@
 
 import { type FC, useEffect, useState } from "react";
 
-import AdvocateFilter from "@/components/dashboard/advocate-filter";
+import AdvocateFilter from "@/components/advocates/advocate-filter";
+import { Loader } from "@/components/ui/loader";
 import {
   Table,
   TableBody,
@@ -29,8 +30,9 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed;
 };
 
-const AdvocateTable: FC = () => {
+const Advocates: FC = () => {
   const [advocates, setAdvocates] = useState<AdvocateType[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchFilter, setSearchFilter] = useState<string>("");
 
   useEffect(() => {
@@ -39,7 +41,9 @@ const AdvocateTable: FC = () => {
         const response = await fetch("/api/advocates");
         const data = await response.json();
         setAdvocates(data?.data);
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.error("Error fetching advocate list: ", error);
       }
     };
@@ -159,7 +163,7 @@ const AdvocateTable: FC = () => {
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                {isLoading ? <Loader /> : "No results."}
               </TableCell>
             </TableRow>
           )}
@@ -169,4 +173,4 @@ const AdvocateTable: FC = () => {
   );
 };
 
-export default AdvocateTable;
+export default Advocates;

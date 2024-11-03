@@ -1,7 +1,7 @@
 "use client";
 
 import Logo from "@/assets/logo";
-import AdvocateTable from "@/components/dashboard/advocate-table";
+import Advocates from "@/components/advocates/advocates";
 
 export default function Home() {
   return (
@@ -12,7 +12,7 @@ export default function Home() {
           Find your care advocate
         </div>
       </div>
-      <AdvocateTable />
+      <Advocates />
     </main>
   );
 }
