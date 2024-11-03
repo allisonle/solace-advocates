@@ -13,6 +13,8 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        homepage:
+          "linear-gradient(110deg, rgba(255,255,255,1) 0%, rgba(175,200,191,1) 100%)",
       },
       borderRadius: {
         lg: "var(--radius)",
