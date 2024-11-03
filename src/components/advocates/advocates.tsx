@@ -122,7 +122,7 @@ const Advocates: FC = () => {
   });
 
   return (
-    <div className="rounded-xl bg-card py-4 shadow-xl">
+    <div className="rounded-xl bg-card py-4 shadow-xl min-h-[400px]">
       <AdvocateFilter
         searchFilter={searchFilter}
         setSearchFilter={setSearchFilter}
