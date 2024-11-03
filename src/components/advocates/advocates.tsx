@@ -13,6 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { AdvocateType } from "@/context/types";
+import { formatPhoneNumber } from "@/lib/formatters";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import {
   type ColumnDef,
@@ -96,6 +97,8 @@ const Advocates: FC = () => {
     {
       accessorKey: "phoneNumber",
       header: "Phone #",
+      cell: cell => formatPhoneNumber(cell.getValue() as string),
+      size: 140,
     },
   ];
 
