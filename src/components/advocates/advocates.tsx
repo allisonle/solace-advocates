@@ -80,6 +80,7 @@ const Advocates: FC = () => {
           {(cell.getValue() as string).split(";").map((specialty: string) => (
             <div
               className="inline-block bg-accent hover:bg-accent/60 rounded-full px-2 py-1 mb-1 mr-1 font-medium text-[11px]"
+              key={specialty}
               onClick={() => {
                 setSearchFilter(specialty);
               }}
@@ -122,7 +123,7 @@ const Advocates: FC = () => {
   });
 
   return (
-    <div className="rounded-xl bg-card py-4 shadow-xl min-h-[400px]">
+    <div className="rounded-xl bg-card py-4 shadow-xl">
       <AdvocateFilter
         searchFilter={searchFilter}
         setSearchFilter={setSearchFilter}
