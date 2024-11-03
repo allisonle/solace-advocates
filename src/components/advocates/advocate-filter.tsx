@@ -10,7 +10,7 @@ interface Props {
 
 const AdvocateFilter: FC<Props> = ({ searchFilter, setSearchFilter }) => {
   return (
-    <div className="w-1/3 flex flex-row gap-2 mb-4 px-4 items-center">
+    <div className="w-full md:w-1/3 border-box flex flex-row gap-2 mb-4 px-4 items-center">
       <Input
         className="bg-white border-border"
         placeholder="Search for an advocate..."
