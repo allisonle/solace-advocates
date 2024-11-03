@@ -14,7 +14,7 @@ import {
 import { AdvocateType } from "@/context/types";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import {
-  ColumnDef,
+  type ColumnDef,
   type FilterFn,
   type FilterFnOption,
   flexRender,
@@ -24,7 +24,7 @@ import {
 } from "@tanstack/react-table";
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  const itemRank = rankItem(row.getValue(columnId), value);
+  const itemRank = rankItem(row.getValue(columnId), value, { threshold: 3 });
   addMeta({ itemRank });
   return itemRank.passed;
 };
@@ -45,18 +45,30 @@ const columns: ColumnDef<AdvocateType>[] = [
   {
     accessorKey: "degree",
     header: "Degree",
+    size: 50,
   },
   {
     accessorKey: "specialties",
     header: "Specialties",
+    size: 360,
+    accessorFn: row => row.specialties.join(";"),
+    cell: cell => (
+      <div className="justify-content-start text-start leading-3">
+        {(cell.getValue() as string).split(";").map((specialty: string) => (
+          <div className="inline-block bg-accent rounded-full px-2 py-1 mb-1 mr-1 font-medium text-[11px]">
+            {specialty}
+          </div>
+        ))}
+      </div>
+    ),
   },
   {
     accessorKey: "yearsOfExperience",
-    header: "Years of Experience",
+    header: "YoE",
   },
   {
     accessorKey: "phoneNumber",
-    header: "Phone Number",
+    header: "Phone #",
   },
 ];
 
@@ -93,70 +105,62 @@ const AdvocateTable: FC = () => {
     defaultColumn: {
       size: 100,
       minSize: 80,
-      maxSize: 200,
+      maxSize: 360,
     },
   });
 
   return (
-    <>
+    <div className="rounded-xl bg-card py-4 shadow-xl">
       <AdvocateFilter
         searchFilter={searchFilter}
         setSearchFilter={setSearchFilter}
       />
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map(headerGroup => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      className={`w-[${header.getSize()}px]`}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
+      <Table>
+        <TableHeader className="font-bold">
+          {table.getHeaderGroups().map(headerGroup => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map(header => {
+                return (
+                  <TableHead
+                    key={header.id}
+                    style={{ width: header.column.getSize() }}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                );
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map(row => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+              >
+                {row.getVisibleCells().map(cell => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
               </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map(row => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-    </>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 
