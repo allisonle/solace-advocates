@@ -29,49 +29,6 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed;
 };
 
-const columns: ColumnDef<AdvocateType>[] = [
-  {
-    accessorKey: "firstName",
-    header: "First Name",
-  },
-  {
-    accessorKey: "lastName",
-    header: "Last Name",
-  },
-  {
-    accessorKey: "city",
-    header: "City",
-  },
-  {
-    accessorKey: "degree",
-    header: "Degree",
-    size: 50,
-  },
-  {
-    accessorKey: "specialties",
-    header: "Specialties",
-    size: 360,
-    accessorFn: row => row.specialties.join(";"),
-    cell: cell => (
-      <div className="justify-content-start text-start leading-3">
-        {(cell.getValue() as string).split(";").map((specialty: string) => (
-          <div className="inline-block bg-accent rounded-full px-2 py-1 mb-1 mr-1 font-medium text-[11px]">
-            {specialty}
-          </div>
-        ))}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "yearsOfExperience",
-    header: "YoE",
-  },
-  {
-    accessorKey: "phoneNumber",
-    header: "Phone #",
-  },
-];
-
 const AdvocateTable: FC = () => {
   const [advocates, setAdvocates] = useState<AdvocateType[]>([]);
   const [searchFilter, setSearchFilter] = useState<string>("");
@@ -89,6 +46,54 @@ const AdvocateTable: FC = () => {
 
     fetchAdvocates();
   }, []);
+
+  const columns: ColumnDef<AdvocateType>[] = [
+    {
+      accessorKey: "firstName",
+      header: "First Name",
+    },
+    {
+      accessorKey: "lastName",
+      header: "Last Name",
+    },
+    {
+      accessorKey: "city",
+      header: "City",
+    },
+    {
+      accessorKey: "degree",
+      header: "Degree",
+      size: 50,
+    },
+    {
+      accessorKey: "specialties",
+      header: "Specialties",
+      size: 360,
+      accessorFn: row => row.specialties.join(";"),
+      cell: cell => (
+        <button className="justify-content-start text-start leading-3">
+          {(cell.getValue() as string).split(";").map((specialty: string) => (
+            <div
+              className="inline-block bg-accent hover:bg-accent/60 rounded-full px-2 py-1 mb-1 mr-1 font-medium text-[11px]"
+              onClick={() => {
+                setSearchFilter(specialty);
+              }}
+            >
+              {specialty}
+            </div>
+          ))}
+        </button>
+      ),
+    },
+    {
+      accessorKey: "yearsOfExperience",
+      header: "YoE",
+    },
+    {
+      accessorKey: "phoneNumber",
+      header: "Phone #",
+    },
+  ];
 
   const table = useReactTable({
     data: advocates,
